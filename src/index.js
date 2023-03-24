@@ -12,7 +12,6 @@ const refs = {
   btnLoad: document.querySelector('.load-more'),
   textCollections: document.querySelector('.text-Collections'),
 };
-// console.log(refs.btnLoad)
 
 function renderGallery(array) {
   const markup = array
