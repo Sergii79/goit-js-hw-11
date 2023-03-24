@@ -1,10 +1,8 @@
-
-
 import Notiflix from 'notiflix';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import { fetchImages } from './js/fetchGallery';
+import { fetchGallery } from './js/fetchGallery';
 
 const refs = {
   form: document.querySelector('.search-form'),
@@ -16,7 +14,7 @@ const refs = {
 };
 // console.log(refs.btnLoad)
 
-function renderImages(array) {
+function renderGallery(array) {
   const markup = array
     .map(
       ({
@@ -78,10 +76,10 @@ async function submitSearchForm(event) {
     return;
   }
 
-  const response = await fetchImages(searchQuery, currentPage);
+  const response = await fetchGallery(searchQuery, currentPage);
   currentHits = response.hits.length;
 
-  if (response.totalHits > 40) {
+  if (response.totalHits > 20) {
     refs.btnLoad.classList.remove('is-hidden');
   } else {
     refs.btnLoad.classList.add('is-hidden');
@@ -91,7 +89,7 @@ async function submitSearchForm(event) {
     if (response.totalHits > 0) {
       Notify.success(`Hooray! We found ${response.totalHits} images.`);
       refs.galleryItems.innerHTML = '';
-      renderImages(response.hits);
+      renderGallery(response.hits);
       lightbox.refresh();
       refs.textCollections.classList.add('is-hidden');
 
@@ -121,8 +119,8 @@ refs.btnLoad.addEventListener('click', clickBtnLoad);
 
 async function clickBtnLoad() {
   currentPage += 1;
-  const response = await fetchImages(searchQuery, currentPage);
-  renderImages(response.hits);
+  const response = await fetchGallery(searchQuery, currentPage);
+  renderGallery(response.hits);
   lightbox.refresh();
   currentHits += response.hits.length;
 
@@ -131,61 +129,3 @@ async function clickBtnLoad() {
     refs.textCollections.classList.remove('is-hidden');
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import { fetchGallery } from "./js/fetchGallery";
-
-// console.log(fetchGallery());
-
-// const refs = {
-//     form: document.getElementById('search-form'),
-//     // input: document.querySelector('[type="text"]'),
-//     gallery: document.querySelector('.gallery'),
-// };
-
-
-// refs.form.addEventListener('submit', formHandler);
-// console.log(refs.form);
-
-// async function formHandler(event) {
-//     event.preventDefault();
-//     searchQuery = event.currentTarget.searchQuery.value;
-//     currentPage = 1;
-
-//     if (searchQuery === '') {
-//         return;
-//     }
-// }
-
-
-// async function formHandler(event) {
-//   event.preventDefault();
-//   refs.gallery.innerHTML = '';
-//   // lightbox.refresh();
-//   buttonLoadMore.hidden = false;
-//   searchImg = event.currentTarget.searchQuery.value.trim();
-//   if (!searchImg) {
-//     buttonLoadMore.hidden = true;
-//     return;
-//   }
-//   if (searchImg === '') {
-//     buttonLoadMore.hidden = true;
-//     return;
-//   }
